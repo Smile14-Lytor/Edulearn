@@ -1,0 +1,2947 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingoLearn Pro - Apprendre les langues</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #2196F3;
+            --accent: #9C27B0;
+            --danger: #F44336;
+            --warning: #FF9800;
+            --success: #8BC34A;
+            --background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-border: rgba(255, 255, 255, 0.2);
+            --text-primary: white;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        .theme-dark {
+            --background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #1a1a2e 100%);
+            --card-bg: rgba(0, 0, 0, 0.3);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-light {
+            --background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 50%, #e4efe9 100%);
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --text-primary: #2c3e50;
+            --text-secondary: #34495e;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-colorful {
+            --background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%);
+            --card-bg: rgba(255, 255, 255, 0.2);
+            --card-border: rgba(255, 255, 255, 0.3);
+            --text-primary: #2c3e50;
+            --text-secondary: #34495e;
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header amélioré */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--warning));
+            background-size: 200% 100%;
+            animation: rainbow 3s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 2.2em;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 1.2em;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 80px;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Navigation principale */
+        .main-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px 25px;
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn.active {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: rgba(76, 175, 80, 0.5);
+        }
+
+        /* Sections principales */
+        .section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Sélection de cours */
+        .course-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .language-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .language-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .language-card:hover::before {
+            opacity: 1;
+        }
+
+        .language-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-flag {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .language-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .language-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        /* Sélection de niveaux */
+        .level-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .level-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .level-card.completed {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: rgba(76, 175, 80, 0.4);
+        }
+
+        .level-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .level-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .level-title {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .level-description {
+            color: var(--text-secondary);
+            font-size: 0.85em;
+        }
+
+        /* Interface de leçon améliorée */
+        .lesson-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .lesson-progress {
+            flex: 1;
+            margin: 0 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--glass-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-text {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .exercise-area {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .question-type {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            padding: 10px 20px;
+            display: inline-block;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.6em;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .word-display {
+            font-size: 3em;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 30px 0;
+            padding: 30px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 20px;
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            position: relative;
+            text-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .word-display::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--success), var(--primary));
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0.6;
+            filter: blur(8px);
+        }
+
+        /* Options de réponse améliorées */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .option-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            font-size: 1.2em;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+        }
+
+        .option-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .option-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: rgba(76, 175, 80, 0.5);
+        }
+
+        .option-card.correct {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: var(--primary);
+            animation: correctPulse 0.8s ease;
+        }
+
+        .option-card.incorrect {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: var(--danger);
+            animation: incorrectShake 0.6s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-15px); }
+            75% { transform: translateX(15px); }
+        }
+
+        /* Feedback amélioré */
+        .feedback-area {
+            margin: 30px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feedback-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid transparent;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .feedback-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feedback-card.correct {
+            border-color: var(--primary);
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        .feedback-card.incorrect {
+            border-color: var(--danger);
+            background: rgba(244, 67, 54, 0.2);
+        }
+
+        .feedback-text {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .feedback-explanation {
+            font-size: 1em;
+            color: var(--text-secondary);
+        }
+
+        /* Boutons d'action */
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--warning), #FF8E8E);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 35px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn.secondary {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Écrans de fin */
+        .completion-screen {
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(33, 150, 243, 0.2));
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+        }
+
+        .completion-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: celebrationBounce 1s ease infinite;
+        }
+
+        @keyframes celebrationBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .completion-title {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .completion-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .completion-stat {
+            text-align: center;
+        }
+
+        .completion-stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .completion-stat-label {
+            font-size: 1em;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        /* Animations de célébration */
+        .celebration-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .particle {
+            position: absolute;
+            font-size: 2em;
+            animation: particleFloat 3s ease-out forwards;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Section Statistiques */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-chart-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            height: 300px;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Section Succès */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .achievement-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .achievement-card.locked {
+            opacity: 0.6;
+            filter: grayscale(1);
+        }
+
+        .achievement-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .achievement-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .achievement-desc {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .achievement-progress {
+            height: 6px;
+            background: var(--glass-bg);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .achievement-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .achievement-progress-text {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+        }
+
+        /* Section Paramètres */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .settings-group {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .settings-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-item {
+            margin-bottom: 20px;
+        }
+
+        .setting-label {
+            display: block;
+            font-size: 1em;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .setting-description {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--glass-bg);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .theme-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .theme-option:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-option.active {
+            border-color: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        .theme-default {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        }
+
+        .theme-dark {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #1a1a2e 100%);
+        }
+
+        .theme-light {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 50%, #e4efe9 100%);
+        }
+
+        .theme-colorful {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(28px);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            margin-bottom: 25px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        /* Notification de succès */
+        .achievement-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1500;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 400px;
+        }
+
+        .achievement-notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification-icon {
+            font-size: 2.5em;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .notification-desc {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
+        /* Import de cours */
+        .import-area {
+            border: 2px dashed var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: var(--transition);
+        }
+
+        .import-area:hover {
+            border-color: var(--primary);
+        }
+
+        .import-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .import-text {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .user-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .main-nav {
+                justify-content: center;
+            }
+
+            .course-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .level-selection {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .word-display {
+                font-size: 2.5em;
+                padding: 20px;
+            }
+
+            .completion-stats {
+                gap: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* États cachés */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Chargement */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🦉</span>
+                    LingoLearn Pro
+                </div>
+                <div class="user-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalScore">0</div>
+                        <div class="stat-label">Score Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="currentStreak">0</div>
+                        <div class="stat-label">Série</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="userLevel">1</div>
+                        <div class="stat-label">Niveau</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="lessonsCompleted">0</div>
+                        <div class="stat-label">Leçons</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation principale -->
+        <div class="main-nav">
+            <button class="nav-btn active" data-section="home">🏠 Accueil</button>
+            <button class="nav-btn" data-section="progress">📊 Progression</button>
+            <button class="nav-btn" data-section="achievements">🏆 Succès</button>
+            <button class="nav-btn" data-section="settings">⚙️ Paramètres</button>
+        </div>
+
+        <!-- Section Accueil -->
+        <div id="homeSection" class="section active">
+            <h2 class="section-title"><i class="fas fa-home"></i> Sélectionnez une langue à apprendre</h2>
+            <div class="course-selection">
+                <div class="language-card" data-lang="en">
+                    <div class="language-flag">🇺🇸</div>
+                    <div class="language-name">Anglais</div>
+                    <div class="language-description">De débutant à expert</div>
+                    <div class="language-progress">
+                        <span>50 leçons</span>
+                        <span id="enProgress">0% complété</span>
+                    </div>
+                </div>
+                <div class="language-card" data-lang="es">
+                    <div class="language-flag">🇪🇸</div>
+                    <div class="language-name">Espagnol</div>
+                    <div class="language-description">¡Hola! Commencez ici</div>
+                    <div class="language-progress">
+                        <span>45 leçons</span>
+                        <span id="esProgress">0% complété</span>
+                    </div>
+                </div>
+                <div class="language-card" data-lang="de">
+                    <div class="language-flag">🇩🇪</div>
+                    <div class="language-name">Allemand</div>
+                    <div class="language-description">Guten Tag! Apprenez facilement</div>
+                    <div class="language-progress">
+                        <span>40 leçons</span>
+                        <span id="deProgress">0% complété</span>
+                    </div>
+                </div>
+                <div class="language-card" data-lang="fr">
+                    <div class="language-flag">🇫🇷</div>
+                    <div class="language-name">Français</div>
+                    <div class="language-description">Bonjour! Pour les étrangers</div>
+                    <div class="language-progress">
+                        <span>55 leçons</span>
+                        <span id="frProgress">0% complété</span>
+                    </div>
+                </div>
+                <div class="language-card" data-lang="it">
+                    <div class="language-flag">🇮🇹</div>
+                    <div class="language-name">Italien</div>
+                    <div class="language-description">Ciao! La bella lingua</div>
+                    <div class="language-progress">
+                        <span>35 leçons</span>
+                        <span id="itProgress">0% complété</span>
+                    </div>
+                </div>
+                <div class="language-card" data-lang="pt">
+                    <div class="language-flag">🇧🇷</div>
+                    <div class="language-name">Portugais</div>
+                    <div class="language-description">Olá! Brésil et Portugal</div>
+                    <div class="language-progress">
+                        <span>30 leçons</span>
+                        <span id="ptProgress">0% complété</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sélection de niveaux -->
+            <div id="levelSelection" class="level-selection hidden"></div>
+
+            <!-- Interface de leçon -->
+            <div id="lessonContainer" class="lesson-container hidden">
+                <div class="lesson-header">
+                    <button class="btn secondary" id="backBtn">← Retour</button>
+                    <div class="lesson-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="lessonProgress"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">0/0</div>
+                    </div>
+                    <div style="color: var(--text-primary);" id="currentLevelDisplay">Niveau 1</div>
+                </div>
+
+                <div class="exercise-area">
+                    <div class="question-type" id="questionType">Traduction</div>
+                    <div class="question-text" id="questionText">Que signifie ce mot en français ?</div>
+                    <div class="word-display" id="wordDisplay">Hello</div>
+                    <div class="options-grid" id="optionsGrid"></div>
+                    <div class="feedback-area">
+                        <div class="feedback-card" id="feedbackCard">
+                            <div class="feedback-text" id="feedbackText"></div>
+                            <div class="feedback-explanation" id="feedbackExplanation"></div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn" id="continueBtn" style="display: none;">Continuer</button>
+                        <button class="btn secondary" id="skipBtn">Passer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Écran de fin de leçon -->
+            <div id="completionScreen" class="completion-screen hidden">
+                <div class="completion-icon">🎉</div>
+                <div class="completion-title">Félicitations !</div>
+                <div class="completion-stats">
+                    <div class="completion-stat">
+                        <div class="completion-stat-number" id="finalScore">0</div>
+                        <div class="completion-stat-label">Points gagnés</div>
+                    </div>
+                    <div class="completion-stat">
+                        <div class="completion-stat-number" id="finalAccuracy">0%</div>
+                        <div class="completion-stat-label">Précision</div>
+                    </div>
+                    <div class="completion-stat">
+                        <div class="completion-stat-number" id="finalTime">0</div>
+                        <div class="completion-stat-label">Temps (min)</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn" id="nextLevelBtn">Niveau suivant</button>
+                    <button class="btn secondary" id="retryBtn">Recommencer</button>
+                    <button class="btn secondary" id="homeBtn2">Accueil</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Progression -->
+        <div id="progressSection" class="section">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> Vos Statistiques de Progression</h2>
+            
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <div class="stat-number" id="statsTotalScore">0</div>
+                    <div class="stat-label">Score Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statsTotalTime">0h</div>
+                    <div class="stat-label">Temps d'étude</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statsAvgAccuracy">0%</div>
+                    <div class="stat-label">Précision moyenne</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statsDaysActive">0</div>
+                    <div class="stat-label">Jours actifs</div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-chart-container">
+                    <canvas id="weeklyProgressChart"></canvas>
+                </div>
+                <div class="stat-chart-container">
+                    <canvas id="languageProgressChart"></canvas>
+                </div>
+            </div>
+
+            <h3 class="section-title"><i class="fas fa-history"></i> Historique des Sessions</h3>
+            <div id="sessionHistory" class="settings-group">
+                <p>Aucune session enregistrée pour le moment.</p>
+            </div>
+        </div>
+
+        <!-- Section Succès -->
+        <div id="achievementsSection" class="section">
+            <h2 class="section-title"><i class="fas fa-trophy"></i> Vos Succès</h2>
+            
+            <div class="main-nav" style="margin-bottom: 30px;">
+                <button class="nav-btn active" data-category="all">Tous</button>
+                <button class="nav-btn" data-category="progress">Progression</button>
+                <button class="nav-btn" data-category="skill">Compétence</button>
+                <button class="nav-btn" data-category="social">Social</button>
+                <button class="nav-btn" data-category="special">Spécial</button>
+            </div>
+            
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Les succès seront générés dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Section Paramètres -->
+        <div id="settingsSection" class="section">
+            <h2 class="section-title"><i class="fas fa-cog"></i> Paramètres</h2>
+            
+            <div class="settings-grid">
+                <div class="settings-group">
+                    <h3 class="settings-title"><i class="fas fa-bullseye"></i> Objectifs d'Apprentissage</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Leçons quotidiennes</label>
+                        <p class="setting-description">Nombre de leçons à compléter chaque jour</p>
+                        <input type="range" min="1" max="10" value="5" class="slider" id="dailyGoalSlider">
+                        <div class="setting-value" id="dailyGoalValue">5 leçons/jour</div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Points hebdomadaires</label>
+                        <p class="setting-description">Objectif de points à atteindre chaque semaine</p>
+                        <input type="range" min="100" max="1000" step="100" value="500" class="slider" id="weeklyGoalSlider">
+                        <div class="setting-value" id="weeklyGoalValue">500 points/semaine</div>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3 class="settings-title"><i class="fas fa-palette"></i> Apparence</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Thème de l'application</label>
+                        <p class="setting-description">Choisissez l'apparence de LingoLearn Pro</p>
+                        <div class="theme-selector">
+                            <div class="theme-option theme-default active" data-theme="default"></div>
+                            <div class="theme-option theme-dark" data-theme="dark"></div>
+                            <div class="theme-option theme-light" data-theme="light"></div>
+                            <div class="theme-option theme-colorful" data-theme="colorful"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Animations</label>
+                        <p class="setting-description">Activer/désactiver les animations</p>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="animationsToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3 class="settings-title"><i class="fas fa-volume-up"></i> Audio</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Volume des effets sonores</label>
+                        <p class="setting-description">Volume des sons de feedback et notifications</p>
+                        <input type="range" min="0" max="100" value="80" class="slider" id="sfxVolumeSlider">
+                        <div class="setting-value" id="sfxVolumeValue">80%</div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Volume de la musique</label>
+                        <p class="setting-description">Volume de la musique d'ambiance</p>
+                        <input type="range" min="0" max="100" value="30" class="slider" id="musicVolumeSlider">
+                        <div class="setting-value" id="musicVolumeValue">30%</div>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3 class="settings-title"><i class="fas fa-bell"></i> Notifications</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Rappels d'étude</label>
+                        <p class="setting-description">Recevoir des rappels pour étudier</p>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="studyRemindersToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Fréquence des rappels</label>
+                        <p class="setting-description">Fréquence des notifications de rappel</p>
+                        <select id="reminderFrequency" class="slider">
+                            <option value="1">Quotidien</option>
+                            <option value="2" selected>Toutes les 2 jours</option>
+                            <option value="7">Hebdomadaire</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3 class="settings-title"><i class="fas fa-database"></i> Gestion des Données</h3>
+                    
+                    <div class="setting-item">
+                        <label class="setting-label">Sauvegarde automatique</label>
+                        <p class="setting-description">Sauvegarder automatiquement la progression</p>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoSaveToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="action-buttons" style="justify-content: flex-start;">
+                        <button class="btn secondary" id="exportBtn">Exporter les données</button>
+                        <button class="btn secondary" id="importBtn">Importer des données</button>
+                    </div>
+                    
+                    <div class="action-buttons" style="justify-content: flex-start; margin-top: 15px;">
+                        <button class="btn secondary" id="resetProgressBtn">Réinitialiser la progression</button>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3 class="settings-title"><i class="fas fa-book"></i> Cours Personnalisés</h3>
+                    
+                    <div class="import-area" id="importArea">
+                        <div class="import-icon"><i class="fas fa-file-import"></i></div>
+                        <div class="import-text">Glissez-déposez un fichier .txt ici ou cliquez pour importer</div>
+                        <button class="btn secondary" id="importCustomBtn">Importer un cours</button>
+                        <input type="file" id="customCourseInput" accept=".txt" style="display: none;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Particules de célébration -->
+    <div class="celebration-particles" id="particles"></div>
+
+    <!-- Notification de succès -->
+    <div class="achievement-notification" id="achievementNotification">
+        <div class="notification-icon">🏆</div>
+        <div class="notification-content">
+            <div class="notification-title" id="notificationTitle">Nouveau succès débloqué!</div>
+            <div class="notification-desc" id="notificationDesc">Description du succès</div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Confirmation</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <p>Êtes-vous sûr de vouloir effectuer cette action?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary" id="modalCancel">Annuler</button>
+                <button class="btn" id="modalConfirm">Confirmer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class LingoLearnPro {
+            constructor() {
+                this.currentLanguage = '';
+                this.currentLevel = 1;
+                this.currentQuestion = 0;
+                this.currentCourse = [];
+                this.answered = false;
+                this.score = 0;
+                this.streak = 0;
+                this.totalScore = parseInt(localStorage.getItem('totalScore') || '0');
+                this.lessonsCompleted = parseInt(localStorage.getItem('lessonsCompleted') || '0');
+                this.startTime = Date.now();
+                this.correctAnswers = 0;
+                this.settings = this.loadSettings();
+                this.achievements = this.loadAchievements();
+                this.sessionHistory = this.loadSessionHistory();
+                this.applyTheme(this.settings.theme);
+                
+                // Base de données de cours étendue
+                this.courseDatabase = {
+                    en: {
+                        name: 'Anglais',
+                        levels: {
+                            1: {
+                                title: 'Débutant - Bases',
+                                description: 'Apprenez les mots et phrases essentiels',
+                                lessons: 10,
+                                words: [
+                                    { word: 'Hello', translation: 'Bonjour', category: 'Salutations' },
+                                    { word: 'Goodbye', translation: 'Au revoir', category: 'Salutations' },
+                                    { word: 'Thank you', translation: 'Merci', category: 'Basiques' },
+                                    { word: 'Yes', translation: 'Oui', category: 'Basiques' },
+                                    { word: 'No', translation: 'Non', category: 'Basiques' },
+                                    { word: 'Please', translation: 'S\'il vous plaît', category: 'Basiques' },
+                                    { word: 'Water', translation: 'Eau', category: 'Nourriture' },
+                                    { word: 'Food', translation: 'Nourriture', category: 'Nourriture' },
+                                    { word: 'Man', translation: 'Homme', category: 'Personnes' },
+                                    { word: 'Woman', translation: 'Femme', category: 'Personnes' }
+                                ]
+                            },
+                            2: {
+                                title: 'Débutant - Phrases simples',
+                                description: 'Formez vos premières phrases',
+                                lessons: 10,
+                                words: [
+                                    { word: 'I am', translation: 'Je suis', category: 'Phrases' },
+                                    { word: 'You are', translation: 'Tu es', category: 'Phrases' },
+                                    { word: 'He is', translation: 'Il est', category: 'Phrases' },
+                                    { word: 'She is', translation: 'Elle est', category: 'Phrases' },
+                                    { word: 'My name is', translation: 'Mon nom est', category: 'Phrases' },
+                                    { word: 'How are you?', translation: 'Comment allez-vous?', category: 'Questions' },
+                                    { word: 'I\'m fine', translation: 'Je vais bien', category: 'Réponses' },
+                                    { word: 'What is this?', translation: 'Qu\'est-ce que c\'est?', category: 'Questions' },
+                                    { word: 'This is', translation: 'C\'est', category: 'Phrases' },
+                                    { word: 'I don\'t understand', translation: 'Je ne comprends pas', category: 'Phrases' }
+                                ]
+                            },
+                            3: {
+                                title: 'Intermédiaire - Conversation',
+                                description: 'Développez vos compétences conversationnelles',
+                                lessons: 10,
+                                words: [
+                                    { word: 'Where is', translation: 'Où est', category: 'Questions' },
+                                    { word: 'How much', translation: 'Combien', category: 'Questions' },
+                                    { word: 'I would like', translation: 'Je voudrais', category: 'Phrases' },
+                                    { word: 'Can you help me?', translation: 'Pouvez-vous m\'aider?', category: 'Questions' },
+                                    { word: 'I need', translation: 'J\'ai besoin', category: 'Phrases' },
+                                    { word: 'What time is it?', translation: 'Quelle heure est-il?', category: 'Questions' },
+                                    { word: 'Today', translation: 'Aujourd\'hui', category: 'Temps' },
+                                    { word: 'Tomorrow', translation: 'Demain', category: 'Temps' },
+                                    { word: 'Yesterday', translation: 'Hier', category: 'Temps' },
+                                    { word: 'Now', translation: 'Maintenant', category: 'Temps' }
+                                ]
+                            },
+                            4: {
+                                title: 'Intermédiaire - Vocabulaire avancé',
+                                description: 'Élargissez votre vocabulaire',
+                                lessons: 10,
+                                words: [
+                                    { word: 'Beautiful', translation: 'Beau', category: 'Adjectifs' },
+                                    { word: 'Interesting', translation: 'Intéressant', category: 'Adjectifs' },
+                                    { word: 'Difficult', translation: 'Difficile', category: 'Adjectifs' },
+                                    { word: 'Easy', translation: 'Facile', category: 'Adjectifs' },
+                                    { word: 'Important', translation: 'Important', category: 'Adjectifs' },
+                                    { word: 'To work', translation: 'Travailler', category: 'Verbes' },
+                                    { word: 'To eat', translation: 'Manger', category: 'Verbes' },
+                                    { word: 'To drink', translation: 'Boire', category: 'Verbes' },
+                                    { word: 'To go', translation: 'Aller', category: 'Verbes' },
+                                    { word: 'To see', translation: 'Voir', category: 'Verbes' }
+                                ]
+                            },
+                            5: {
+                                title: 'Avancé - Maîtrise',
+                                description: 'Perfectionnez votre anglais',
+                                lessons: 10,
+                                words: [
+                                    { word: 'Nevertheless', translation: 'Néanmoins', category: 'Conjonctions' },
+                                    { word: 'Furthermore', translation: 'De plus', category: 'Conjonctions' },
+                                    { word: 'Therefore', translation: 'Par conséquent', category: 'Conjonctions' },
+                                    { word: 'Although', translation: 'Bien que', category: 'Conjonctions' },
+                                    { word: 'Meanwhile', translation: 'Pendant ce temps', category: 'Conjonctions' },
+                                    { word: 'Environment', translation: 'Environnement', category: 'Noms' },
+                                    { word: 'Government', translation: 'Gouvernement', category: 'Noms' },
+                                    { word: 'Knowledge', translation: 'Connaissance', category: 'Noms' },
+                                    { word: 'Opportunity', translation: 'Opportunité', category: 'Noms' },
+                                    { word: 'Technology', translation: 'Technologie', category: 'Noms' }
+                                ]
+                            }
+                        }
+                    },
+                    es: {
+                        name: 'Espagnol',
+                        levels: {
+                            1: {
+                                title: 'Débutant - Bases',
+                                description: 'Apprenez les mots et phrases essentiels',
+                                lessons: 9,
+                                words: [
+                                    { word: 'Hola', translation: 'Bonjour', category: 'Salutations' },
+                                    { word: 'Adiós', translation: 'Au revoir', category: 'Salutations' },
+                                    { word: 'Gracias', translation: 'Merci', category: 'Basiques' },
+                                    { word: 'Sí', translation: 'Oui', category: 'Basiques' },
+                                    { word: 'No', translation: 'Non', category: 'Basiques' },
+                                    { word: 'Por favor', translation: 'S\'il vous plaît', category: 'Basiques' },
+                                    { word: 'Agua', translation: 'Eau', category: 'Nourriture' },
+                                    { word: 'Comida', translation: 'Nourriture', category: 'Nourriture' },
+                                    { word: 'Hombre', translation: 'Homme', category: 'Personnes' },
+                                    { word: 'Mujer', translation: 'Femme', category: 'Personnes' }
+                                ]
+                            },
+                            // Niveaux supplémentaires pour l'espagnol...
+                        }
+                    },
+                    // Autres langues...
+                };
+
+                this.initializeEventListeners();
+                this.updateUI();
+                this.startAutoSave();
+            }
+
+            initializeEventListeners() {
+                // Navigation principale
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const section = e.target.dataset.section;
+                        if (section) {
+                            this.showSection(section);
+                        }
+                    });
+                });
+
+                // Sélection de langue
+                document.querySelectorAll('.language-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        this.selectLanguage(e.currentTarget.dataset.lang);
+                    });
+                });
+
+                // Boutons de leçon
+                document.getElementById('backBtn').addEventListener('click', () => this.showLevelSelection());
+                document.getElementById('skipBtn').addEventListener('click', () => this.nextQuestion());
+                document.getElementById('continueBtn').addEventListener('click', () => this.nextQuestion());
+                document.getElementById('nextLevelBtn').addEventListener('click', () => this.nextLevel());
+                document.getElementById('retryBtn').addEventListener('click', () => this.startLesson());
+                document.getElementById('homeBtn2').addEventListener('click', () => this.showHome());
+
+                // Paramètres
+                document.getElementById('dailyGoalSlider').addEventListener('input', (e) => {
+                    document.getElementById('dailyGoalValue').textContent = `${e.target.value} leçons/jour`;
+                    this.settings.dailyGoal = parseInt(e.target.value);
+                    this.saveSettings();
+                });
+
+                document.getElementById('weeklyGoalSlider').addEventListener('input', (e) => {
+                    document.getElementById('weeklyGoalValue').textContent = `${e.target.value} points/semaine`;
+                    this.settings.weeklyGoal = parseInt(e.target.value);
+                    this.saveSettings();
+                });
+
+                document.getElementById('sfxVolumeSlider').addEventListener('input', (e) => {
+                    document.getElementById('sfxVolumeValue').textContent = `${e.target.value}%`;
+                    this.settings.sfxVolume = parseInt(e.target.value);
+                    this.saveSettings();
+                });
+
+                document.getElementById('musicVolumeSlider').addEventListener('input', (e) => {
+                    document.getElementById('musicVolumeValue').textContent = `${e.target.value}%`;
+                    this.settings.musicVolume = parseInt(e.target.value);
+                    this.saveSettings();
+                });
+
+                document.getElementById('animationsToggle').addEventListener('change', (e) => {
+                    this.settings.animations = e.target.checked;
+                    this.saveSettings();
+                });
+
+                document.getElementById('studyRemindersToggle').addEventListener('change', (e) => {
+                    this.settings.studyReminders = e.target.checked;
+                    this.saveSettings();
+                });
+
+                document.getElementById('autoSaveToggle').addEventListener('change', (e) => {
+                    this.settings.autoSave = e.target.checked;
+                    this.saveSettings();
+                });
+
+                document.getElementById('reminderFrequency').addEventListener('change', (e) => {
+                    this.settings.reminderFrequency = parseInt(e.target.value);
+                    this.saveSettings();
+                });
+
+                document.querySelectorAll('.theme-option').forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        const theme = e.currentTarget.dataset.theme;
+                        this.applyTheme(theme);
+                        this.settings.theme = theme;
+                        this.saveSettings();
+                        
+                        document.querySelectorAll('.theme-option').forEach(opt => {
+                            opt.classList.remove('active');
+                        });
+                        e.currentTarget.classList.add('active');
+                    });
+                });
+
+                document.getElementById('exportBtn').addEventListener('click', () => this.exportData());
+                document.getElementById('importBtn').addEventListener('click', () => document.getElementById('customCourseInput').click());
+                document.getElementById('resetProgressBtn').addEventListener('click', () => this.showResetConfirmation());
+                document.getElementById('customCourseInput').addEventListener('change', (e) => this.importCustomCourse(e.target.files[0]));
+
+                // Raccourcis clavier
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        if (!document.getElementById('lessonContainer').classList.contains('hidden')) {
+                            this.showLevelSelection();
+                        } else if (!document.getElementById('levelSelection').classList.contains('hidden')) {
+                            this.showHome();
+                        }
+                    }
+                    
+                    if (e.key === ' ' || e.key === 'Enter') {
+                        if (!document.getElementById('continueBtn').classList.contains('hidden')) {
+                            document.getElementById('continueBtn').click();
+                        }
+                    }
+                    
+                    if (e.key >= '1' && e.key <= '4') {
+                        const index = parseInt(e.key) - 1;
+                        const options = document.querySelectorAll('.option-card');
+                        if (index < options.length && !this.answered) {
+                            options[index].click();
+                        }
+                    }
+                });
+
+                // Filtres de succès
+                document.querySelectorAll('[data-category]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const category = e.target.dataset.category;
+                        this.filterAchievements(category);
+                    });
+                });
+
+                // Modal
+                document.getElementById('modalClose').addEventListener('click', () => this.hideModal());
+                document.getElementById('modalCancel').addEventListener('click', () => this.hideModal());
+                document.getElementById('modalConfirm').addEventListener('click', () => this.confirmModal());
+            }
+
+            loadSettings() {
+                const defaultSettings = {
+                    theme: 'default',
+                    dailyGoal: 5,
+                    weeklyGoal: 500,
+                    sfxVolume: 80,
+                    musicVolume: 30,
+                    animations: true,
+                    studyReminders: true,
+                    reminderFrequency: 2,
+                    autoSave: true,
+                    autoSaveInterval: 30
+                };
+                
+                const saved = localStorage.getItem('appSettings');
+                return saved ? {...defaultSettings, ...JSON.parse(saved)} : defaultSettings;
+            }
+
+            saveSettings() {
+                localStorage.setItem('appSettings', JSON.stringify(this.settings));
+            }
+
+            loadAchievements() {
+                const defaultAchievements = [
+                    {
+                        id: 'first_lesson',
+                        title: 'Première Leçon',
+                        description: 'Complétez votre première leçon',
+                        icon: '🎯',
+                        category: 'progress',
+                        progress: 0,
+                        goal: 1,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'streak_3',
+                        title: 'Série de 3 Jours',
+                        description: 'Apprenez pendant 3 jours consécutifs',
+                        icon: '🔥',
+                        category: 'progress',
+                        progress: 0,
+                        goal: 3,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'streak_7',
+                        title: 'Série d\'une Semaine',
+                        description: 'Apprenez pendant 7 jours consécutifs',
+                        icon: '🌟',
+                        category: 'progress',
+                        progress: 0,
+                        goal: 7,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'score_1000',
+                        title: 'Score de 1000 Points',
+                        description: 'Atteignez un score total de 1000 points',
+                        icon: '🏅',
+                        category: 'skill',
+                        progress: 0,
+                        goal: 1000,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'accuracy_90',
+                        title: 'Précision de 90%',
+                        description: 'Obtenez une précision de 90% dans une leçon',
+                        icon: '🎯',
+                        category: 'skill',
+                        progress: 0,
+                        goal: 90,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'polyglot',
+                        title: 'Polyglotte',
+                        description: 'Apprenez des mots dans 3 langues différentes',
+                        icon: '🌎',
+                        category: 'skill',
+                        progress: 0,
+                        goal: 3,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'completionist',
+                        title: 'Completionniste',
+                        description: 'Terminez un niveau complet à 100%',
+                        icon: '✅',
+                        category: 'progress',
+                        progress: 0,
+                        goal: 1,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'speedster',
+                        title: 'Speedster',
+                        description: 'Terminez une leçon en moins de 2 minutes',
+                        icon: '⚡',
+                        category: 'skill',
+                        progress: 0,
+                        goal: 1,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'perfectionist',
+                        title: 'Perfectionniste',
+                        description: 'Terminez une leçon avec 100% de précision',
+                        icon: '💯',
+                        category: 'skill',
+                        progress: 0,
+                        goal: 1,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'explorer',
+                        title: 'Explorateur',
+                        description: 'Découvrez tous les types d\'exercices',
+                        icon: '🧭',
+                        category: 'special',
+                        progress: 0,
+                        goal: 3,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'night_owl',
+                        title: 'Oiseau de Nuit',
+                        description: 'Apprenez après 22h',
+                        icon: '🦉',
+                        category: 'special',
+                        progress: 0,
+                        goal: 1,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'early_bird',
+                        title: 'Lève-Tôt',
+                        description: 'Apprenez avant 7h',
+                        icon: '🐦',
+                        category: 'special',
+                        progress: 0,
+                        goal: 1,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'sharer',
+                        title: 'Partageur',
+                        description: 'Partagez votre progression sur les réseaux sociaux',
+                        icon: '📤',
+                        category: 'social',
+                        progress: 0,
+                        goal: 1,
+                        unlocked: false,
+                        date: null
+                    },
+                    {
+                        id: 'helper',
+                        title: 'Assistant',
+                        description: 'Aidez 3 autres personnes à apprendre',
+                        icon: '🤝',
+                        category: 'social',
+                        progress: 0,
+                        goal: 3,
+                        unlocked: false,
+                        date: null
+                    }
+                ];
+                
+                const saved = localStorage.getItem('achievements');
+                if (saved) {
+                    return JSON.parse(saved);
+                } else {
+                    localStorage.setItem('achievements', JSON.stringify(defaultAchievements));
+                    return defaultAchievements;
+                }
+            }
+
+            saveAchievements() {
+                localStorage.setItem('achievements', JSON.stringify(this.achievements));
+            }
+
+            loadSessionHistory() {
+                const saved = localStorage.getItem('sessionHistory');
+                return saved ? JSON.parse(saved) : [];
+            }
+
+            saveSessionHistory() {
+                localStorage.setItem('sessionHistory', JSON.stringify(this.sessionHistory));
+            }
+
+            applyTheme(theme) {
+                document.body.className = '';
+                if (theme !== 'default') {
+                    document.body.classList.add(`theme-${theme}`);
+                }
+            }
+
+            showSection(section) {
+                // Masquer toutes les sections
+                document.querySelectorAll('.section').forEach(sec => {
+                    sec.classList.remove('active');
+                });
+                
+                // Désactiver tous les boutons de navigation
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Afficher la section demandée
+                document.getElementById(`${section}Section`).classList.add('active');
+                
+                // Activer le bouton de navigation correspondant
+                document.querySelector(`[data-section="${section}"]`).classList.add('active');
+                
+                // Charger les données spécifiques à la section
+                if (section === 'progress') {
+                    this.loadProgressData();
+                } else if (section === 'achievements') {
+                    this.loadAchievementsData();
+                }
+            }
+
+            showHome() {
+                this.hideAll();
+                document.getElementById('courseSelection').classList.remove('hidden');
+                this.updateProgressBars();
+            }
+
+            selectLanguage(lang) {
+                this.currentLanguage = lang;
+                this.showLevelSelection();
+            }
+
+            showLevelSelection() {
+                this.hideAll();
+                document.getElementById('levelSelection').classList.remove('hidden');
+                
+                // Générer les cartes de niveau
+                const levelSelection = document.getElementById('levelSelection');
+                levelSelection.innerHTML = '';
+                
+                const levels = this.courseDatabase[this.currentLanguage].levels;
+                const userProgress = this.getUserProgress();
+                
+                for (let i = 1; i <= Object.keys(levels).length; i++) {
+                    const level = levels[i];
+                    const levelCard = document.createElement('div');
+                    levelCard.className = 'level-card';
+                    
+                    if (userProgress[this.currentLanguage] && userProgress[this.currentLanguage][i] && userProgress[this.currentLanguage][i].completed) {
+                        levelCard.classList.add('completed');
+                    } else if (i > 1 && (!userProgress[this.currentLanguage] || !userProgress[this.currentLanguage][i-1] || !userProgress[this.currentLanguage][i-1].completed)) {
+                        levelCard.classList.add('locked');
+                    }
+                    
+                    levelCard.innerHTML = `
+                        <div class="level-number">${i}</div>
+                        <div class="level-title">${level.title}</div>
+                        <div class="level-description">${level.description}</div>
+                        <div class="language-progress">
+                            <span>${level.lessons} leçons</span>
+                            <span>${userProgress[this.currentLanguage] && userProgress[this.currentLanguage][i] ? Math.round((userProgress[this.currentLanguage][i].completedLessons / level.lessons) * 100) : 0}% complété</span>
+                        </div>
+                    `;
+                    
+                    if (!levelCard.classList.contains('locked')) {
+                        levelCard.addEventListener('click', () => {
+                            this.currentLevel = i;
+                            this.startLesson();
+                        });
+                    }
+                    
+                    levelSelection.appendChild(levelCard);
+                }
+            }
+
+            startLesson() {
+                this.hideAll();
+                document.getElementById('lessonContainer').classList.remove('hidden');
+                
+                this.currentQuestion = 0;
+                this.score = 0;
+                this.correctAnswers = 0;
+                this.startTime = Date.now();
+                
+                // Charger le cours actuel
+                this.currentCourse = this.courseDatabase[this.currentLanguage].levels[this.currentLevel].words;
+                
+                // Mélanger le cours pour une session de révision
+                this.shuffleArray(this.currentCourse);
+                
+                this.displayQuestion();
+            }
+
+            displayQuestion() {
+                if (this.currentQuestion >= this.currentCourse.length) {
+                    this.completeLesson();
+                    return;
+                }
+                
+                this.answered = false;
+                const word = this.currentCourse[this.currentQuestion];
+                
+                // Mettre à jour la progression
+                const progressPercent = (this.currentQuestion / this.currentCourse.length) * 100;
+                document.getElementById('lessonProgress').style.width = `${progressPercent}%`;
+                document.getElementById('progressText').textContent = `${this.currentQuestion + 1}/${this.currentCourse.length}`;
+                document.getElementById('currentLevelDisplay').textContent = `Niveau ${this.currentLevel}`;
+                
+                // Déterminer le type de question
+                const questionTypes = ['translation', 'reverse', 'multiple'];
+                const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+                
+                let questionText, wordDisplay, options;
+                
+                switch (questionType) {
+                    case 'translation':
+                        questionText = 'Que signifie ce mot en français ?';
+                        wordDisplay = word.word;
+                        options = this.generateOptions(word, 'translation');
+                        break;
+                    case 'reverse':
+                        questionText = 'Comment dit-on en ' + this.courseDatabase[this.currentLanguage].name + ' ?';
+                        wordDisplay = word.translation;
+                        options = this.generateOptions(word, 'reverse');
+                        break;
+                    case 'multiple':
+                        questionText = 'Quel mot correspond à cette traduction ?';
+                        wordDisplay = word.translation;
+                        options = this.generateOptions(word, 'multiple');
+                        break;
+                }
+                
+                document.getElementById('questionType').textContent = this.getQuestionTypeLabel(questionType);
+                document.getElementById('questionText').textContent = questionText;
+                document.getElementById('wordDisplay').textContent = wordDisplay;
+                
+                // Générer les options
+                const optionsGrid = document.getElementById('optionsGrid');
+                optionsGrid.innerHTML = '';
+                
+                options.forEach((option, index) => {
+                    const optionCard = document.createElement('div');
+                    optionCard.className = 'option-card';
+                    optionCard.textContent = option;
+                    optionCard.dataset.correct = option === (questionType === 'translation' || questionType === 'multiple' ? word.translation : word.word);
+                    
+                    optionCard.addEventListener('click', () => {
+                        if (this.answered) return;
+                        
+                        this.answered = true;
+                        const isCorrect = optionCard.dataset.correct === 'true';
+                        
+                        if (isCorrect) {
+                            optionCard.classList.add('correct');
+                            this.score += 10;
+                            this.correctAnswers++;
+                            this.streak++;
+                            this.playSound('correct');
+                        } else {
+                            optionCard.classList.add('incorrect');
+                            this.streak = 0;
+                            this.playSound('incorrect');
+                            
+                            // Highlight the correct answer
+                            document.querySelectorAll('.option-card').forEach(card => {
+                                if (card.dataset.correct === 'true') {
+                                    card.classList.add('correct');
+                                }
+                            });
+                        }
+                        
+                        this.showFeedback(isCorrect, word);
+                        this.updateScore();
+                    });
+                    
+                    optionsGrid.appendChild(optionCard);
+                });
+                
+                // Masquer le bouton Continuer et afficher le bouton Passer
+                document.getElementById('continueBtn').style.display = 'none';
+                document.getElementById('skipBtn').style.display = 'block';
+            }
+
+            generateOptions(correctWord, type) {
+                const allWords = this.courseDatabase[this.currentLanguage].levels[this.currentLevel].words;
+                const options = [type === 'translation' || type === 'multiple' ? correctWord.translation : correctWord.word];
+                
+                // Ajouter 3 options incorrectes
+                while (options.length < 4) {
+                    const randomWord = allWords[Math.floor(Math.random() * allWords.length)];
+                    const option = type === 'translation' || type === 'multiple' ? randomWord.translation : randomWord.word;
+                    
+                    if (!options.includes(option) && option !== (type === 'translation' || type === 'multiple' ? correctWord.translation : correctWord.word)) {
+                        options.push(option);
+                    }
+                }
+                
+                // Mélanger les options
+                this.shuffleArray(options);
+                return options;
+            }
+
+            showFeedback(isCorrect, word) {
+                const feedbackCard = document.getElementById('feedbackCard');
+                feedbackCard.className = isCorrect ? 'feedback-card correct' : 'feedback-card incorrect';
+                feedbackCard.classList.add('show');
+                
+                document.getElementById('feedbackText').textContent = isCorrect ? 'Correct !' : 'Incorrect';
+                document.getElementById('feedbackExplanation').textContent = `${word.word} signifie "${word.translation}" en français`;
+                
+                // Afficher le bouton Continuer et masquer le bouton Passer
+                document.getElementById('continueBtn').style.display = 'block';
+                document.getElementById('skipBtn').style.display = 'none';
+            }
+
+            nextQuestion() {
+                this.currentQuestion++;
+                
+                const feedbackCard = document.getElementById('feedbackCard');
+                feedbackCard.classList.remove('show');
+                
+                setTimeout(() => {
+                    this.displayQuestion();
+                }, 500);
+            }
+
+            completeLesson() {
+                this.hideAll();
+                document.getElementById('completionScreen').classList.remove('hidden');
+                
+                const timeSpent = (Date.now() - this.startTime) / 1000 / 60; // en minutes
+                const accuracy = Math.round((this.correctAnswers / this.currentCourse.length) * 100);
+                
+                document.getElementById('finalScore').textContent = this.score;
+                document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+                document.getElementById('finalTime').textContent = timeSpent.toFixed(1);
+                
+                // Mettre à jour les statistiques globales
+                this.totalScore += this.score;
+                this.lessonsCompleted++;
+                
+                // Mettre à jour la progression utilisateur
+                this.updateUserProgress(accuracy, timeSpent);
+                
+                // Enregistrer la session
+                this.recordSession(accuracy, timeSpent);
+                
+                // Vérifier les succès
+                this.checkAchievements();
+                
+                // Mettre à jour l'UI
+                this.updateUI();
+                
+                // Jouer le son de célébration
+                this.playSound('completion');
+                
+                // Lancer les animations de célébration
+                if (this.settings.animations) {
+                    this.celebrate();
+                }
+            }
+
+            updateUserProgress(accuracy, timeSpent) {
+                let userProgress = JSON.parse(localStorage.getItem('userProgress') || '{}');
+                
+                if (!userProgress[this.currentLanguage]) {
+                    userProgress[this.currentLanguage] = {};
+                }
+                
+                if (!userProgress[this.currentLanguage][this.currentLevel]) {
+                    userProgress[this.currentLanguage][this.currentLevel] = {
+                        completedLessons: 0,
+                        bestAccuracy: 0,
+                        bestTime: Infinity,
+                        totalTime: 0
+                    };
+                }
+                
+                userProgress[this.currentLanguage][this.currentLevel].completedLessons++;
+                
+                if (accuracy > userProgress[this.currentLanguage][this.currentLevel].bestAccuracy) {
+                    userProgress[this.currentLanguage][this.currentLevel].bestAccuracy = accuracy;
+                }
+                
+                if (timeSpent < userProgress[this.currentLanguage][this.currentLevel].bestTime) {
+                    userProgress[this.currentLanguage][this.currentLevel].bestTime = timeSpent;
+                }
+                
+                userProgress[this.currentLanguage][this.currentLevel].totalTime += timeSpent;
+                
+                localStorage.setItem('userProgress', JSON.stringify(userProgress));
+                localStorage.setItem('totalScore', this.totalScore.toString());
+                localStorage.setItem('lessonsCompleted', this.lessonsCompleted.toString());
+                
+                // Mettre à jour la série actuelle
+                this.updateStreak();
+            }
+
+            getUserProgress() {
+                return JSON.parse(localStorage.getItem('userProgress') || '{}');
+            }
+
+            updateStreak() {
+                let lastStudyDate = localStorage.getItem('lastStudyDate');
+                const today = new Date().toDateString();
+                
+                if (lastStudyDate !== today) {
+                    let currentStreak = parseInt(localStorage.getItem('currentStreak') || '0');
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    
+                    if (lastStudyDate === yesterday.toDateString()) {
+                        currentStreak++;
+                    } else {
+                        currentStreak = 1;
+                    }
+                    
+                    localStorage.setItem('currentStreak', currentStreak.toString());
+                    localStorage.setItem('lastStudyDate', today);
+                    
+                    this.streak = currentStreak;
+                    document.getElementById('currentStreak').textContent = currentStreak;
+                }
+            }
+
+            recordSession(accuracy, timeSpent) {
+                const session = {
+                    date: new Date().toISOString(),
+                    language: this.currentLanguage,
+                    level: this.currentLevel,
+                    score: this.score,
+                    accuracy: accuracy,
+                    timeSpent: timeSpent,
+                    words: this.currentCourse.length
+                };
+                
+                this.sessionHistory.unshift(session);
+                if (this.sessionHistory.length > 50) {
+                    this.sessionHistory.pop();
+                }
+                
+                this.saveSessionHistory();
+            }
+
+            checkAchievements() {
+                let earnedAchievements = [];
+                
+                this.achievements.forEach(achievement => {
+                    if (achievement.unlocked) return;
+                    
+                    let progress = achievement.progress;
+                    let goal = achievement.goal;
+                    
+                    switch (achievement.id) {
+                        case 'first_lesson':
+                            progress = this.lessonsCompleted;
+                            break;
+                        case 'streak_3':
+                        case 'streak_7':
+                            progress = this.streak;
+                            break;
+                        case 'score_1000':
+                            progress = this.totalScore;
+                            break;
+                        case 'accuracy_90':
+                            if (Math.round((this.correctAnswers / this.currentCourse.length) * 100) >= 90) {
+                                progress = 1;
+                            }
+                            break;
+                        case 'polyglot':
+                            // Compter le nombre de langues étudiées
+                            const userProgress = this.getUserProgress();
+                            progress = Object.keys(userProgress).length;
+                            break;
+                        case 'completionist':
+                            // Vérifier si un niveau est complété à 100%
+                            const currentLevelProgress = this.getUserProgress()[this.currentLanguage]?.[this.currentLevel];
+                            if (currentLevelProgress && currentLevelProgress.completedLessons >= this.courseDatabase[this.currentLanguage].levels[this.currentLevel].lessons) {
+                                progress = 1;
+                            }
+                            break;
+                        case 'speedster':
+                            const timeSpent = (Date.now() - this.startTime) / 1000 / 60;
+                            if (timeSpent <= 2) {
+                                progress = 1;
+                            }
+                            break;
+                        case 'perfectionist':
+                            if (this.correctAnswers === this.currentCourse.length) {
+                                progress = 1;
+                            }
+                            break;
+                        case 'night_owl':
+                            const now = new Date();
+                            if (now.getHours() >= 22) {
+                                progress = 1;
+                            }
+                            break;
+                        case 'early_bird':
+                            const currentTime = new Date();
+                            if (currentTime.getHours() < 7) {
+                                progress = 1;
+                            }
+                            break;
+                    }
+                    
+                    if (progress >= goal) {
+                        achievement.unlocked = true;
+                        achievement.date = new Date().toISOString();
+                        earnedAchievements.push(achievement);
+                    }
+                    
+                    achievement.progress = Math.min(progress, goal);
+                });
+                
+                this.saveAchievements();
+                
+                // Afficher les notifications pour les succès débloqués
+                earnedAchievements.forEach(achievement => {
+                    this.showAchievementNotification(achievement);
+                });
+            }
+
+            showAchievementNotification(achievement) {
+                const notification = document.getElementById('achievementNotification');
+                document.getElementById('notificationTitle').textContent = achievement.title;
+                document.getElementById('notificationDesc').textContent = achievement.description;
+                
+                notification.classList.add('show');
+                
+                this.playSound('achievement');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 5000);
+            }
+
+            nextLevel() {
+                this.currentLevel++;
+                const levels = this.courseDatabase[this.currentLanguage].levels;
+                
+                if (this.currentLevel > Object.keys(levels).length) {
+                    this.showHome();
+                } else {
+                    this.showLevelSelection();
+                }
+            }
+
+            updateUI() {
+                document.getElementById('totalScore').textContent = this.totalScore;
+                document.getElementById('lessonsCompleted').textContent = this.lessonsCompleted;
+                
+                // Mettre à jour les barres de progression des langues
+                this.updateProgressBars();
+            }
+
+            updateProgressBars() {
+                const userProgress = this.getUserProgress();
+                
+                for (const lang in this.courseDatabase) {
+                    const progressElement = document.getElementById(`${lang}Progress`);
+                    if (progressElement) {
+                        let totalLessons = 0;
+                        let completedLessons = 0;
+                        
+                        for (const level in this.courseDatabase[lang].levels) {
+                            totalLessons += this.courseDatabase[lang].levels[level].lessons;
+                            
+                            if (userProgress[lang] && userProgress[lang][level]) {
+                                completedLessons += userProgress[lang][level].completedLessons;
+                            }
+                        }
+                        
+                        const percent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+                        progressElement.textContent = `${percent}% complété`;
+                    }
+                }
+            }
+
+            hideAll() {
+                document.getElementById('courseSelection').classList.add('hidden');
+                document.getElementById('levelSelection').classList.add('hidden');
+                document.getElementById('lessonContainer').classList.add('hidden');
+                document.getElementById('completionScreen').classList.add('hidden');
+            }
+
+            shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            getQuestionTypeLabel(type) {
+                const labels = {
+                    'translation': 'Traduction',
+                    'reverse': 'Traduction Inverse',
+                    'multiple': 'Choix Multiple'
+                };
+                return labels[type] || 'Question';
+            }
+
+            playSound(type) {
+                if (this.settings.sfxVolume === 0) return;
+                
+                // Implémentation basique des sons (à améliorer)
+                console.log(`Playing sound: ${type} at volume ${this.settings.sfxVolume}%`);
+            }
+
+            celebrate() {
+                const particles = document.getElementById('particles');
+                particles.innerHTML = '';
+                
+                const emojis = ['🎉', '🎊', '⭐', '🔥', '💯', '🏆', '🎯', '🌟'];
+                
+                for (let i = 0; i < 30; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.animationDelay = `${Math.random() * 2}s`;
+                    particles.appendChild(particle);
+                }
+                
+                setTimeout(() => {
+                    particles.innerHTML = '';
+                }, 3000);
+            }
+
+            loadProgressData() {
+                // Mettre à jour les statistiques
+                const userProgress = this.getUserProgress();
+                const totalTime = Object.values(userProgress).reduce((total, lang) => {
+                    return total + Object.values(lang).reduce((langTotal, level) => {
+                        return langTotal + (level.totalTime || 0);
+                    }, 0);
+                }, 0);
+                
+                const totalDays = new Set(this.sessionHistory.map(s => new Date(s.date).toDateString())).size;
+                
+                let totalAccuracy = 0;
+                let totalSessions = 0;
+                
+                this.sessionHistory.forEach(session => {
+                    totalAccuracy += session.accuracy;
+                    totalSessions++;
+                });
+                
+                const avgAccuracy = totalSessions > 0 ? Math.round(totalAccuracy / totalSessions) : 0;
+                
+                document.getElementById('statsTotalScore').textContent = this.totalScore;
+                document.getElementById('statsTotalTime').textContent = `${Math.round(totalTime)}h`;
+                document.getElementById('statsAvgAccuracy').textContent = `${avgAccuracy}%`;
+                document.getElementById('statsDaysActive').textContent = totalDays;
+                
+                // Générer les graphiques
+                this.renderCharts();
+                
+                // Afficher l'historique des sessions
+                this.renderSessionHistory();
+            }
+
+            renderCharts() {
+                // Données hebdomadaires (factices pour la démonstration)
+                const weeklyData = {
+                    labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                    datasets: [{
+                        label: 'Points gagnés',
+                        data: [120, 190, 300, 250, 180, 220, 340],
+                        backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                        borderColor: 'rgba(76, 175, 80, 1)',
+                        borderWidth: 2,
+                        tension: 0.3
+                    }]
+                };
+                
+                // Données de progression par langue (factices pour la démonstration)
+                const languageData = {
+                    labels: ['Anglais', 'Espagnol', 'Allemand', 'Français', 'Italien', 'Portugais'],
+                    datasets: [{
+                        label: 'Pourcentage complété',
+                        data: [65, 45, 30, 20, 15, 10],
+                        backgroundColor: [
+                            'rgba(76, 175, 80, 0.7)',
+                            'rgba(33, 150, 243, 0.7)',
+                            'rgba(156, 39, 176, 0.7)',
+                            'rgba(255, 152, 0, 0.7)',
+                            'rgba(244, 67, 54, 0.7)',
+                            'rgba(0, 188, 212, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+                
+                // Graphique de progression hebdomadaire
+                const weeklyCtx = document.getElementById('weeklyProgressChart').getContext('2d');
+                new Chart(weeklyCtx, {
+                    type: 'line',
+                    data: weeklyData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Graphique de progression par langue
+                const languageCtx = document.getElementById('languageProgressChart').getContext('2d');
+                new Chart(languageCtx, {
+                    type: 'bar',
+                    data: languageData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            renderSessionHistory() {
+                const container = document.getElementById('sessionHistory');
+                container.innerHTML = '';
+                
+                if (this.sessionHistory.length === 0) {
+                    container.innerHTML = '<p>Aucune session enregistrée pour le moment.</p>';
+                    return;
+                }
+                
+                this.sessionHistory.slice(0, 10).forEach(session => {
+                    const sessionElement = document.createElement('div');
+                    sessionElement.className = 'setting-item';
+                    sessionElement.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${this.courseDatabase[session.language].name} - Niveau ${session.level}</strong>
+                                <div style="font-size: 0.9em; color: var(--text-secondary);">
+                                    ${new Date(session.date).toLocaleDateString()} | 
+                                    Score: ${session.score} | 
+                                    Précision: ${session.accuracy}% | 
+                                    Temps: ${session.timeSpent.toFixed(1)} min
+                                </div>
+                            </div>
+                            <div style="font-size: 1.5em;">
+                                ${session.accuracy >= 90 ? '💯' : session.accuracy >= 70 ? '👍' : '👎'}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(sessionElement);
+                });
+            }
+
+            loadAchievementsData() {
+                const container = document.getElementById('achievementsGrid');
+                container.innerHTML = '';
+                
+                this.achievements.forEach(achievement => {
+                    const achievementCard = document.createElement('div');
+                    achievementCard.className = `achievement-card ${achievement.unlocked ? '' : 'locked'}`;
+                    achievementCard.innerHTML = `
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-title">${achievement.title}</div>
+                        <div class="achievement-desc">${achievement.description}</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: ${(achievement.progress / achievement.goal) * 100}%"></div>
+                        </div>
+                        <div class="achievement-progress-text">${achievement.progress}/${achievement.goal}</div>
+                    `;
+                    container.appendChild(achievementCard);
+                });
+            }
+
+            filterAchievements(category) {
+                if (category === 'all') {
+                    document.querySelectorAll('.achievement-card').forEach(card => {
+                        card.style.display = 'block';
+                    });
+                } else {
+                    // Implémentation simplifiée - dans une version complète, 
+                    // vous auriez un attribut data-category sur chaque carte de succès
+                    document.querySelectorAll('.achievement-card').forEach(card => {
+                        card.style.display = 'none';
+                    });
+                }
+                
+                // Mettre à jour les boutons actifs
+                document.querySelectorAll('[data-category]').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-category="${category}"]`).classList.add('active');
+            }
+
+            exportData() {
+                const data = {
+                    userProgress: this.getUserProgress(),
+                    achievements: this.achievements,
+                    sessionHistory: this.sessionHistory,
+                    totalScore: this.totalScore,
+                    lessonsCompleted: this.lessonsCompleted,
+                    settings: this.settings
+                };
+                
+                const dataStr = JSON.stringify(data);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `lingolearn-backup-${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            }
+
+            importData(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        if (data.userProgress) localStorage.setItem('userProgress', JSON.stringify(data.userProgress));
+                        if (data.achievements) localStorage.setItem('achievements', JSON.stringify(data.achievements));
+                        if (data.sessionHistory) localStorage.setItem('sessionHistory', JSON.stringify(data.sessionHistory));
+                        if (data.totalScore) localStorage.setItem('totalScore', data.totalScore.toString());
+                        if (data.lessonsCompleted) localStorage.setItem('lessonsCompleted', data.lessonsCompleted.toString());
+                        if (data.settings) localStorage.setItem('appSettings', JSON.stringify(data.settings));
+                        
+                        // Recharger l'application
+                        location.reload();
+                    } catch (error) {
+                        alert('Erreur lors de l\'importation des données: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+
+            importCustomCourse(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const content = e.target.result;
+                        const lines = content.split('\n').filter(line => line.trim());
+                        
+                        if (lines.length < 2) {
+                            throw new Error('Le fichier doit contenir au moins deux lignes (langue et mots)');
+                        }
+                        
+                        const language = lines[0].trim();
+                        const words = [];
+                        
+                        for (let i = 1; i < lines.length; i++) {
+                            const parts = lines[i].split('=');
+                            if (parts.length === 2) {
+                                words.push({
+                                    word: parts[0].trim(),
+                                    translation: parts[1].trim(),
+                                    category: 'Personnalisé'
+                                });
+                            }
+                        }
+                        
+                        if (!this.courseDatabase[language]) {
+                            this.courseDatabase[language] = {
+                                name: language,
+                                levels: {
+                                    1: {
+                                        title: 'Cours Personnalisé',
+                                        description: 'Vos mots importés',
+                                        lessons: Math.ceil(words.length / 10),
+                                        words: words
+                                    }
+                                }
+                            };
+                        } else {
+                            // Trouver le prochain niveau disponible
+                            const levelCount = Object.keys(this.courseDatabase[language].levels).length;
+                            this.courseDatabase[language].levels[levelCount + 1] = {
+                                title: 'Cours Personnalisé',
+                                description: 'Vos mots importés',
+                                lessons: Math.ceil(words.length / 10),
+                                words: words
+                            };
+                        }
+                        
+                        alert(`Cours personnalisé importé avec succès! ${words.length} mots ajoutés.`);
+                    } catch (error) {
+                        alert('Erreur lors de l\'importation du cours: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+
+            showResetConfirmation() {
+                this.showModal(
+                    'Réinitialisation',
+                    'Êtes-vous sûr de vouloir réinitialiser toutes vos données de progression? Cette action est irréversible.',
+                    () => this.resetProgress()
+                );
+            }
+
+            showModal(title, message, confirmCallback) {
+                this.modalConfirmCallback = confirmCallback;
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalBody').innerHTML = `<p>${message}</p>`;
+                document.getElementById('confirmModal').classList.add('active');
+            }
+
+            hideModal() {
+                document.getElementById('confirmModal').classList.remove('active');
+                this.modalConfirmCallback = null;
+            }
+
+            confirmModal() {
+                if (this.modalConfirmCallback) {
+                    this.modalConfirmCallback();
+                }
+                this.hideModal();
+            }
+
+            resetProgress() {
+                localStorage.removeItem('userProgress');
+                localStorage.removeItem('achievements');
+                localStorage.removeItem('sessionHistory');
+                localStorage.removeItem('totalScore');
+                localStorage.removeItem('lessonsCompleted');
+                localStorage.removeItem('currentStreak');
+                localStorage.removeItem('lastStudyDate');
+                
+                // Réinitialiser les variables
+                this.totalScore = 0;
+                this.lessonsCompleted = 0;
+                this.streak = 0;
+                this.achievements = this.loadAchievements(); // Recharger les succès par défaut
+                this.sessionHistory = [];
+                
+                // Mettre à jour l'UI
+                this.updateUI();
+                this.updateProgressBars();
+                
+                alert('Progression réinitialisée avec succès!');
+            }
+
+            startAutoSave() {
+                if (this.settings.autoSave) {
+                    setInterval(() => {
+                        this.saveSettings();
+                    }, this.settings.autoSaveInterval * 1000);
+                }
+            }
+
+            updateScore() {
+                document.getElementById('totalScore').textContent = this.totalScore;
+            }
+        }
+
+        // Initialiser l'application lorsque la page est chargée
+        document.addEventListener('DOMContentLoaded', () => {
+            window.lingoLearnApp = new LingoLearnPro();
+        });
+    </script>
+</body>
+</html>
